@@ -1,0 +1,41 @@
+// {
+//   "compilerOptions": {
+//     "target": "es2016",                           /* Keep the JavaScript version as es2016 (or change to es2017) */
+//     "module": "commonjs",                         /* Use CommonJS module format for compatibility with Node.js */
+//     "moduleResolution": "node",                   /* Use Node.js resolution strategy for modules */
+//     "strict": true,                               /* Enable strict type-checking */
+//     "esModuleInterop": true,                      /* Allow compatibility with CommonJS modules */
+//     "forceConsistentCasingInFileNames": true,     /* Ensure consistent file casing */
+//     "outDir": "./dist",                           /* Output directory for compiled files */
+//     "rootDir": "./src",                           /* Root directory for source files */
+//     "skipLibCheck": true,                         /* Skip type checking for declaration files */
+//     "resolveJsonModule": true,                    /* Allow importing JSON files */
+//     "baseUrl": "./",                              /* Base directory for module resolution */
+//     "paths": {                                    /* Paths to re-map module imports */
+//       "*": ["node_modules/*", "src/types/*"]
+//     }
+//   },
+//   "include": [
+//     "src/**/*.ts"  /* Include all .ts files in the src directory */
+//   ],
+//   "exclude": [
+//     "node_modules" /* Exclude node_modules from the compilation */
+//   ]
+// }
+
+
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
