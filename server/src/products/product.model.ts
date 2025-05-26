@@ -30,6 +30,7 @@ const productSchema = new Schema<IProduct>({
     type: Schema.Types.ObjectId,
     ref: 'Category',
     required: true,
+    default: "Mixed",
   },
  createdAt: {
     type: Date,

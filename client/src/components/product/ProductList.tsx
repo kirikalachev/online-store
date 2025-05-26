@@ -1,23 +1,17 @@
 'use client';
 import axios from 'axios';
 import { useState } from 'react';
-import EditTab from './EditTab';
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  createdAt: Date;
-}
+import EditProduct from './EditProduct';
+import { Product, RawProduct, Category, RawCategory } from '@/types/product'; 
+import { toRawProduct } from '@/utils/transform';
 
 interface Props {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  categories: Category[]; // 🆕 добавено
 }
 
-export default function ProductList({ products, setProducts }: Props) {
+export default function ProductList({ products, setProducts, categories }: Props) {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
   const handleDelete = async (id: string) => {
@@ -26,7 +20,7 @@ export default function ProductList({ products, setProducts }: Props) {
       if (!confirmDelete) return;
 
       await axios.delete(`http://localhost:3000/api/products/${id}`);
-      console.log("Product deleted", { id });
+      console.log("Category deleted", { id });
 
       setProducts(prev => prev.filter(p => p.id !== id));
     } catch (error) {
@@ -34,17 +28,21 @@ export default function ProductList({ products, setProducts }: Props) {
     }
   };
 
- const handleUpdate = async (updated: Product) => {
-    try {
-      await axios.put(`http://localhost:3000/api/products/${updated.id}`, updated);
-      setProducts(prev =>
-        prev.map(p => (p.id === updated.id ? updated : p))
-      );
-      setEditingProduct(null);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const handleUpdate = async (updated: Product) => {
+  try {
+    const raw = toRawProduct(updated);
+
+    await axios.put(`http://localhost:3000/api/products/${updated.id}`, raw);
+
+    setProducts(prev =>
+      prev.map(p => (p.id === updated.id ? updated : p))
+    );
+    setEditingProduct(null);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   return (
     <div className='flex flex-wrap'>
@@ -53,7 +51,7 @@ export default function ProductList({ products, setProducts }: Props) {
           <h3 className='font-bold'>{product.name}</h3>
           <p>Цена: ${product.price}</p>
           <p>Описание: {product.description}</p>
-          <p>Категория: {product.category}</p>
+          <p>Категория: {product.category.name}</p>
           <p>Създаден на: {new Date(product.createdAt).toLocaleDateString('bg-BG')}</p>
 
           <button
@@ -74,12 +72,14 @@ export default function ProductList({ products, setProducts }: Props) {
           {editingProduct && (
             <div className='mt-6'>
               <h2 className='text-xl mb-2'>Редактиране на продукт:</h2>
-              <EditTab
+              <EditProduct
                 key={editingProduct.id}
                 product={editingProduct}
                 onCancel={() => setEditingProduct(null)}
                 onSave={handleUpdate}
+                categories={categories}
               />
+
             </div>
           )}
 

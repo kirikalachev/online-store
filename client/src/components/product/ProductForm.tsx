@@ -1,31 +1,34 @@
-'use client';
-import axios from 'axios';
-import { useState } from 'react';
+"use client"
 
-interface Props {
-  onProductCreated: () => void;
+import type React from "react"
+import axios from "axios"
+import { useState } from "react"
+
+interface Category {
+  id: string
+  name: string
 }
 
-export default function ProductForm({ onProductCreated }: Props) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('S');
+interface Props {
+  onProductCreated: () => void
+  categories: Category[]
+}
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+export default function ProductForm({ onProductCreated, categories }: Props) {
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+  const [price, setPrice] = useState<string>("")
+  // const [imageUrl, setImageUrl] = useState("")
+  const [category, setCategory] = useState("")
 
-    const priceNumber = Number(price);
-    if (isNaN(priceNumber) || priceNumber <= 0) {
-      alert('Please enter a valid price greater than zero.');
-      return;
-    }
+   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
 
     try {
       await axios.post('http://localhost:3000/api/products/', {
         name,
         description,
-        price: priceNumber,
+        price: Number(price),
         category,
       });
 
@@ -33,55 +36,69 @@ export default function ProductForm({ onProductCreated }: Props) {
       setName('');
       setDescription('');
       setPrice('');
-      setCategory('S');
+      setCategory('');
 
       onProductCreated(); // 🔁 Обновяване на списъка
-    } catch (err: any) {
-      console.error('Axios error:', err.response?.data || err.message);
-      alert('Error creating product');
+    } catch (error) {
+      console.error("Error creating product:", error)
     }
-  };
+  }
 
   return (
-    <form onSubmit={handleSubmit} className='bg-yellow-200 p-4 rounded'>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto">
       <label>Име:</label>
       <input
         type="text"
         value={name}
-        onChange={e => setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
+        className="block mb-4 border px-2 py-1 rounded"
         required
-        className="block mb-2"
       />
 
       <label>Описание:</label>
       <textarea
         value={description}
-        onChange={e => setDescription(e.target.value)}
+        onChange={(e) => setDescription(e.target.value)}
+        className="block mb-4 border px-2 py-1 rounded"
         required
-        className="block mb-2"
       />
 
       <label>Цена:</label>
       <input
         type="number"
         value={price}
-        onChange={e => setPrice(e.target.value)}
+        onChange={(e) => setPrice(e.target.value)}
+        className="block mb-4 border px-2 py-1 rounded"
         required
-        className="block mb-2"
       />
 
+      {/* <label>URL на изображението:</label>
+      <input
+        type="url"
+        value={imageUrl}
+        onChange={(e) => setImageUrl(e.target.value)}
+        className="block mb-4 border px-2 py-1 rounded"
+        required
+      /> */}
+
       <label>Категория:</label>
-      <select value={category} onChange={e => setCategory(e.target.value)} className="block mb-4">
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="block mb-4 border px-2 py-1 rounded"
+        required
+      >
+        <option value="">Изберете категория</option>
+        {categories.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.name}
+          </option>
+        ))}
       </select>
 
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Създай
+      <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">
+        Създай продукт
       </button>
     </form>
-  );
+  )
 }

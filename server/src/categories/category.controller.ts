@@ -1,6 +1,32 @@
 // category.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import Category from './category.model';
+// category.controller.ts
+import Product from '../products/product.model'; // Добави импорт на модела продукт
+
+export const deleteCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    // Проверка дали категорията има продукти
+    const productsWithCategory = await Product.findOne({ category: id });
+    if (productsWithCategory) {
+      res.status(400).json({ message: 'Категорията не може да бъде изтрита, защото има свързани продукти.' });
+      return;
+    }
+
+    const deletedCategory = await Category.findByIdAndDelete(id);
+    if (!deletedCategory) {
+      res.status(404).json({ message: 'Категория не намерена.' });
+      return;
+    }
+
+    res.status(200).json({ message: 'Категорията е изтрита успешно!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Грешка при изтриване на категорията.' });
+  }
+};
+
 
 // Създаване на категория с проверка за дубликати
 export const createCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -90,16 +116,16 @@ export const updateCategory = async (req: Request, res: Response, next: NextFunc
 };
 
 // Изтриване на продукт
-export const deleteCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  try {
-    const { id } = req.params;
-    const deletedCategory = await Category.findByIdAndDelete(id);
-    if (!deletedCategory) {
-      res.status(404).json({ message: 'Category not found.' });
-      return;
-    }
-    res.status(200).json({ message: 'Category deleted successfully!' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error deleting category.' });
-  }
-};
+// export const deleteCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+//   try {
+//     const { id } = req.params;
+//     const deletedCategory = await Category.findByIdAndDelete(id);
+//     if (!deletedCategory) {
+//       res.status(404).json({ message: 'Category not found.' });
+//       return;
+//     }
+//     res.status(200).json({ message: 'Category deleted successfully!' });
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error deleting category.' });
+//   }
+// };
