@@ -1,3 +1,4 @@
+//products/product.model.ts
 import mongoose, {Document, Schema} from 'mongoose';
 
 interface IProduct extends Document {
@@ -6,6 +7,8 @@ interface IProduct extends Document {
     description: string;
     price: number;
     category: mongoose.Types.ObjectId;
+    mainImage: string;
+    galleryImages: string[];
     createdAt: Date;
 }
 
@@ -32,6 +35,14 @@ const productSchema = new Schema<IProduct>({
     required: true,
     default: "Mixed",
   },
+ mainImage: { 
+   type: String, 
+   required: true, 
+},
+ galleryImages: [{ 
+   type: [String],
+   default: [],
+ }],
  createdAt: {
     type: Date,
     default: Date.now,

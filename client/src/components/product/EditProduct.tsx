@@ -1,3 +1,4 @@
+//components.product/EditProduct.tsx
 'use client';
 import { useState } from 'react';
 import { Product, Category } from '@/types/product';
@@ -22,7 +23,7 @@ export default function EditTab({ product, categories, onCancel, onSave }: Props
     }
 
     // 🧠 Намираме пълния Category обект по ID
-    const category = categories.find(cat => cat.id === selectedCategoryId);
+    const category = categories.find(category => category.id === selectedCategoryId);
     if (!category) {
       alert("Избраната категория не е валидна.");
       return;
@@ -39,60 +40,78 @@ export default function EditTab({ product, categories, onCancel, onSave }: Props
     onSave(updated);
   };
 
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onCancel();
+    }
+  };
+
   return (
-    <div className="bg-white p-4 rounded shadow-md w-full max-w-md">
-      <label className="block mb-2">
-        Име:
-        <input
-          className="w-full border px-2 py-1 rounded"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-      </label>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={handleOverlayClick}
+    >
+      <div className="bg-white p-6 rounded shadow-md w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+        <h2 className="text-xl font-bold mb-4">Редактирай продукт</h2>
 
-      <label className="block mb-2">
-        Цена:
-        <input
-          className="w-full border px-2 py-1 rounded"
-          type="number"
-          value={price}
-          onChange={e => setPrice(Number(e.target.value))}
-        />
-      </label>
+        <label className="block mb-2">
+          Име:
+          <input
+            className="w-full border px-2 py-1 rounded"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+        </label>
 
-      <label className="block mb-2">
-        Описание:
-        <input
-          className="w-full border px-2 py-1 rounded"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-        />
-      </label>
+        <label className="block mb-2">
+          Цена:
+          <input
+            className="w-full border px-2 py-1 rounded"
+            type="number"
+            value={price}
+            onChange={e => setPrice(Number(e.target.value))}
+          />
+        </label>
 
-      {/* 🆕 Селект за избор на категория */}
-      <label className="block mb-4">
-        Категория:
-        <select
-          className="w-full border px-2 py-1 rounded"
-          value={selectedCategoryId}
-          onChange={e => setSelectedCategoryId(e.target.value)}
-        >
-          <option value="">Изберете категория</option>
-          {categories.map(cat => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-      </label>
+        <label className="block mb-2">
+          Описание:
+          <input
+            className="w-full border px-2 py-1 rounded"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+          />
+        </label>
 
-      <div className="flex gap-4">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleSubmit}>
-          Запази
-        </button>
-        <button className="bg-gray-400 text-white px-4 py-2 rounded" onClick={onCancel}>
-          Отказ
-        </button>
+        <label className="block mb-4">
+          Категория:
+          <select
+            className="w-full border px-2 py-1 rounded"
+            value={selectedCategoryId}
+            onChange={e => setSelectedCategoryId(e.target.value)}
+          >
+            <option value="">Изберете категория</option>
+            {categories.map(category => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div className="flex justify-end gap-2">
+          <button
+            className="bg-gray-400 text-white px-4 py-2 rounded"
+            onClick={onCancel}
+          >
+            Отказ
+          </button>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+            onClick={handleSubmit}
+          >
+            Запази
+          </button>
+        </div>
       </div>
     </div>
   );

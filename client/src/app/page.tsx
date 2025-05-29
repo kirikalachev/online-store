@@ -121,7 +121,7 @@ useEffect(() => {
         <button className="bg-green-200 rounded p-4 m-2" onClick={() => setCreatingProduct(!creatingProduct)}>
           {creatingProduct ? "Затвори" : "Създай продукт"}
         </button>
-        {creatingProduct ? <ProductForm onProductCreated={handleProductCreated} categories={categories} /> : null}
+        {creatingProduct ? <ProductForm onProductCreated={handleProductCreated} onClose={() => setCreatingProduct(false)} categories={categories} /> : null}
 
         <h3 className="text-lg m-2">Създадени продукти:</h3>
         <ProductList products={products} setProducts={setProducts} categories={categories} />
@@ -133,7 +133,7 @@ useEffect(() => {
         <button className="bg-green-200 rounded p-4 m-2" onClick={() => setCreatingCategory(!creatingCategory)}>
           {creatingCategory ? "Затвори" : "Създай категория"}
         </button>
-        {creatingCategory ? <CategoryForm onCategoryCreated={handleCategoryCreated} /> : null}
+        {creatingCategory ? <CategoryForm onCategoryCreated={handleCategoryCreated} onClose={() => setCreatingCategory(false)}/> : null}
 
         <h3 className="text-lg m-2">Създадени категории:</h3>
         <CategoryList categories={categories} setCategories={setCategories} />

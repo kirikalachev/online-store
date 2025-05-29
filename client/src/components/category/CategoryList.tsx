@@ -68,7 +68,6 @@ export default function ProductList({ categories, setCategories }: Props) {
 
           {editingCategory && (
             <div className='mt-6'>
-              <h2 className='text-xl mb-2'>Редактиране на продукт:</h2>
               <EditCategory
                 key={editingCategory.id}
                 category={editingCategory}

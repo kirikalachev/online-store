@@ -71,7 +71,6 @@ const handleUpdate = async (updated: Product) => {
 
           {editingProduct && (
             <div className='mt-6'>
-              <h2 className='text-xl mb-2'>Редактиране на продукт:</h2>
               <EditProduct
                 key={editingProduct.id}
                 product={editingProduct}
