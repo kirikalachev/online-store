@@ -37,11 +37,12 @@ const productSchema = new Schema<IProduct>({
   },
  mainImage: { 
    type: String, 
-   required: true, 
+   required: false, 
 },
  galleryImages: [{ 
    type: [String],
    default: [],
+   required: false, 
  }],
  createdAt: {
     type: Date,
