@@ -1,13 +1,13 @@
 // components/ProductForm.ts
-"use client"
-
-import type React from "react"
-import axios from "axios"
-import { useState } from "react"
+"use client";
+import type React from "react";
+import axios from "axios";
+import { useState } from "react";
 
 interface Category {
-  id: string
-  name: string
+  id: string;
+  name: string;
+  createdAt: Date;
 }
 
 interface Props {
@@ -17,21 +17,35 @@ interface Props {
 }
 
 export default function ProductForm({ onProductCreated, onClose, categories }: Props) {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [price, setPrice] = useState<string>("")
-  // const [imageUrl, setImageUrl] = useState("")
-  const [category, setCategory] = useState("")
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState<string>("");
+  const [category, setCategory] = useState("");
+  const [mainImage, setMainImage] = useState<File | null>(null);
+  const [galleryImages, setGalleryImages] = useState<File[]>([]);
 
    const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
+    if (!mainImage) {
+      alert("Моля, изберете главна снимка на продукта.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("category", category);
+    formData.append("mainImage", mainImage);
+
+    galleryImages.forEach((file) => {
+      formData.append("galleryImages", file)
+    });
 
     try {
-      await axios.post('http://localhost:3000/api/products/', {
-        name,
-        description,
-        price: Number(price),
-        category,
+      await axios.post('http://localhost:3000/api/products/', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
       });
 
       alert('Product created!');
@@ -39,10 +53,10 @@ export default function ProductForm({ onProductCreated, onClose, categories }: P
       setDescription('');
       setPrice('');
       setCategory('');
-      onProductCreated(); // 🔁 Обновяване на списъка
+      onProductCreated(); 
       onClose();
     } catch (error) {
-      console.error("Error creating product:", error)
+      console.error("Error creating product:", error);
     }
   }
 
@@ -107,6 +121,18 @@ export default function ProductForm({ onProductCreated, onClose, categories }: P
             ))}
           </select>
 
+          <label>Главна снимка:</label>
+          <input type="file" accept="image/*" onChange={(e) => {
+            const file = e.target.files?.[0] || null;
+            setMainImage(file);
+          }} className="block w-full mb-4"/>
+
+          <label>Допълнителни снимки:</label>
+          <input type="file" accept="image/*" multiple onChange={(e) => {
+            const files = Array.from(e.target.files || []);
+            setGalleryImages(files);
+          }} className="block w-full mb-4"/>
+
           <div className="flex justify-end">
             <button
               type="submit"
@@ -118,60 +144,6 @@ export default function ProductForm({ onProductCreated, onClose, categories }: P
         </form>
       </div>
     </div>
-    // <form onSubmit={handleSubmit} className="max-w-md mx-auto">
-    //   <label>Име:</label>
-    //   <input
-    //     type="text"
-    //     value={name}
-    //     onChange={(e) => setName(e.target.value)}
-    //     className="block mb-4 border px-2 py-1 rounded"
-    //     required
-    //   />
 
-    //   <label>Описание:</label>
-    //   <textarea
-    //     value={description}
-    //     onChange={(e) => setDescription(e.target.value)}
-    //     className="block mb-4 border px-2 py-1 rounded"
-    //     required
-    //   />
-
-    //   <label>Цена:</label>
-    //   <input
-    //     type="number"
-    //     value={price}
-    //     onChange={(e) => setPrice(e.target.value)}
-    //     className="block mb-4 border px-2 py-1 rounded"
-    //     required
-    //   />
-
-    //   {/* <label>URL на изображението:</label>
-    //   <input
-    //     type="url"
-    //     value={imageUrl}
-    //     onChange={(e) => setImageUrl(e.target.value)}
-    //     className="block mb-4 border px-2 py-1 rounded"
-    //     required
-    //   /> */}
-
-    //   <label>Категория:</label>
-    //   <select
-    //     value={category}
-    //     onChange={(e) => setCategory(e.target.value)}
-    //     className="block mb-4 border px-2 py-1 rounded"
-    //     required
-    //   >
-    //     <option value="">Изберете категория</option>
-    //     {categories.map((cat) => (
-    //       <option key={cat.id} value={cat.id}>
-    //         {cat.name}
-    //       </option>
-    //     ))}
-    //   </select>
-
-    //   <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700">
-    //     Създай продукт
-    //   </button>
-    // </form>
   )
 }

@@ -59,6 +59,9 @@ export default function Home() {
             name: "Unknown Category",
             createdAt: new Date(),
           },
+          mainImage: product.mainImage,
+          galleryImages: product.galleryImages,
+
           createdAt: new Date(product.createdAt),
         }
       }
@@ -69,6 +72,8 @@ export default function Home() {
         description: product.description,
         price: product.price,
         category: category,
+        mainImage: product.mainImage,
+        galleryImages: product.galleryImages,
         createdAt: new Date(product.createdAt),
       }
     })

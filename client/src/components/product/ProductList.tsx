@@ -1,3 +1,4 @@
+//components/product/ProductForm.tsx
 'use client';
 import axios from 'axios';
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import { toRawProduct } from '@/utils/transform';
 interface Props {
   products: Product[];
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
-  categories: Category[]; // 🆕 добавено
+  categories: Category[]; 
 }
 
 export default function ProductList({ products, setProducts, categories }: Props) {
@@ -48,6 +49,17 @@ const handleUpdate = async (updated: Product) => {
     <div className='flex flex-wrap'>
       {products.map(product => (
         <div key={product.id} className='bg-red-200 m-3 p-4 rounded w-60'>
+          {product.mainImage ? (
+            <img
+              src={`http://localhost:3000${product.mainImage}`}
+              alt={product.name}
+              className='w-full h-40 object-cover mb-2 rounded'
+            />
+          ) : (
+            <div className='w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded'>
+              <span className='text-gray-500'>Няма снимка</span>
+            </div>
+          )}
           <h3 className='font-bold'>{product.name}</h3>
           <p>Цена: ${product.price}</p>
           <p>Описание: {product.description}</p>

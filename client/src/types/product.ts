@@ -5,8 +5,10 @@ export interface RawProduct {
   name: string
   description: string
   price: number
-  category: string | { _id: string; name: string; createdAt: Date } // 🆕 може да е string или обект
-  createdAt: Date
+  category: string | { _id: string; name: string; createdAt: Date }
+  mainImage: string;
+  galleryImages: string[]; // string или string в rawProduct?
+  createdAt: Date;
 }
 
 
@@ -33,7 +35,8 @@ export interface Product {
   description: string;
   price: number;
   category: Category;
-//   createdAt: string;
+  mainImage: string;
+  galleryImages: string[];
   createdAt: Date;
 
 }
