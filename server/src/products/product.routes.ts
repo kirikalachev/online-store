@@ -9,7 +9,7 @@ router.post(
   '/',
   upload.fields([
     { name: 'mainImage', maxCount: 1 },
-    { name: 'additionalImages', maxCount: 5 },
+    { name: 'galleryImages', maxCount: 5 },
   ]),
   createProduct
 );
@@ -22,7 +22,7 @@ router.put(
   '/:id',
   upload.fields([
     { name: 'mainImage', maxCount: 1 },
-    { name: 'additionalImages', maxCount: 5 },
+    { name: 'galleryImages', maxCount: 5 },
   ]),
   updateProduct
 );

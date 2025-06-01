@@ -29,21 +29,50 @@ export default function ProductList({ products, setProducts, categories }: Props
     }
   };
 
-const handleUpdate = async (updated: Product) => {
+// const handleUpdate = async (updated: Product, formData: FormData) => {
+//   try {
+//     await axios.put(
+//       `http://localhost:3000/api/products/${updated.id}`,
+//       formData,
+//       {
+//         headers: {
+//           'Content-Type': 'multipart/form-data',
+//         },
+//       }
+//     );
+
+//     setProducts(prev =>
+//       prev.map(p => (p.id === updated.id ? updated : p))
+//     );
+//     setEditingProduct(null);
+//   } catch (error) {
+//     console.error('Грешка при обновяване:', error);
+//   }
+// };
+
+const handleUpdate = async (updated: Product, formData: FormData) => {
   try {
-    const raw = toRawProduct(updated);
+  const res = await axios.put(
+    `http://localhost:3000/api/products/${updated.id}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
 
-    await axios.put(`http://localhost:3000/api/products/${updated.id}`, raw);
-
-    setProducts(prev =>
-      prev.map(p => (p.id === updated.id ? updated : p))
-    );
-    setEditingProduct(null);
-  } catch (error) {
-    console.log(error);
-  }
+  const data = res.data;
+  setProducts(prev =>
+    prev.map(p => (p.id === data.product.id ? data.product : p))
+  );
+  setEditingProduct(null);
+} catch (err: any) {
+  const errorMessage = err.response?.data?.message || 'Грешка при обновяване на продукта.';
+  alert(errorMessage);
+  console.error('Update failed:', err);
+}
 };
-
 
   return (
     <div className='flex flex-wrap'>

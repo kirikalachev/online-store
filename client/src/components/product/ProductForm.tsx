@@ -53,6 +53,8 @@ export default function ProductForm({ onProductCreated, onClose, categories }: P
       setDescription('');
       setPrice('');
       setCategory('');
+      setMainImage(null);
+      setGalleryImages([]);
       onProductCreated(); 
       onClose();
     } catch (error) {
