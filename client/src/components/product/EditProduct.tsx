@@ -1,7 +1,7 @@
-//EditProduct.tsx
 'use client';
 import { useState, ChangeEvent } from 'react';
 import { Product, Category } from '@/types/product';
+import Image from 'next/image';
 
 interface Props {
   product: Product;
@@ -17,7 +17,7 @@ export default function EditProduct({ product, categories, onCancel, onSave }: P
   const [selectedCategoryId, setSelectedCategoryId] = useState(product.category.id);
 
   const [mainImageFile, setMainImageFile] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<string[]>(product.galleryImages|| []);
+  const [galleryImages, setGalleryImages] = useState<string[]>(product.galleryImages || []);
   const [newGalleryImages, setNewGalleryImages] = useState<File[]>([]);
 
   const handleMainImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +70,6 @@ export default function EditProduct({ product, categories, onCancel, onSave }: P
       formData.append('galleryImages', file);
     });
 
-    // Списъкът със запазени galleryImages (оставащи)
     formData.append('existingExtraImages', JSON.stringify(galleryImages));
 
     onSave(updated, formData);
@@ -112,8 +111,17 @@ export default function EditProduct({ product, categories, onCancel, onSave }: P
         {/* Главно изображение */}
         <div className="mb-4">
           <p className="font-semibold">Главно изображение:</p>
+          {/* Промяна #1: Добавен wrapper div с relative и зададени размери, Image с fill и sizes */}
           {product.mainImage && !mainImageFile && (
-            <img src={`http://localhost:3000${product.mainImage}`} alt="Main" className="w-full h-32 object-cover my-2 rounded" />
+            <div className="relative w-full h-32 my-2 rounded overflow-hidden">
+              <Image
+                src={`http://localhost:3000${product.mainImage}`}
+                alt="Main"
+                fill
+                sizes="100vw"
+                className="object-cover rounded"
+              />
+            </div>
           )}
           {mainImageFile && (
             <p className="text-sm text-green-600">Ще бъде заменено с нов файл: {mainImageFile.name}</p>
@@ -125,9 +133,16 @@ export default function EditProduct({ product, categories, onCancel, onSave }: P
         <div className="mb-4">
           <p className="font-semibold">Допълнителни изображения:</p>
           <div className="flex flex-wrap gap-2 my-2">
+            {/* Промяна #2: Добавен wrapper div с relative и размери, Image с fill и sizes */}
             {galleryImages.map((url, i) => (
-              <div key={i} className="relative">
-                <img src={`http://localhost:3000${url}`} alt={`Extra ${i}`} className="w-20 h-20 object-cover rounded" />
+              <div key={i} className="relative w-20 h-20 rounded overflow-hidden">
+                <Image
+                  src={`http://localhost:3000${url}`}
+                  alt={`Extra ${i}`}
+                  fill
+                  sizes="80px"
+                  className="object-cover rounded"
+                />
                 <button
                   onClick={() => handleRemoveExtraImage(url)}
                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-1 text-xs"

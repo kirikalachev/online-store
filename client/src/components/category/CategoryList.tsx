@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import EditCategory from './EditCategory';
-import { Product, RawProduct, Category, RawCategory } from '@/types/product'; 
+import { Category } from '@/types/product'; 
 
 interface Props {
   categories: Category[];
@@ -20,13 +20,8 @@ export default function ProductList({ categories, setCategories }: Props) {
     try {
       await axios.delete(`http://localhost:3000/api/categories/${id}`);
       setCategories(prev => prev.filter(cat => cat.id !== id));
-    } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        alert(error.response.data.message || 'Категорията не може да бъде изтрита.');
-      } else {
-        alert('Възникна непредвидена грешка');
-        console.error(error);
-      }
+    } catch (err) {
+      console.log("error deleting category ", err)
     }
   };
 

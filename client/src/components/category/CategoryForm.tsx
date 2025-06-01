@@ -22,8 +22,8 @@ export default function CategoryForm({ onCategoryCreated, onClose } : Props) {
             setName('');
             onCategoryCreated();
             onClose();
-        } catch (err: any) {
-            console.error('Axios error:', err.response?.data || err.message);
+        } catch (err) {
+            console.error('Axios error:', err);
             alert('Error creating product');
         }
     };

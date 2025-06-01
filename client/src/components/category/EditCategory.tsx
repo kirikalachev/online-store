@@ -1,7 +1,7 @@
 //components/category/EditCategory.tsx
 'use client';
 import { useState } from 'react';
-import { Product, RawProduct, Category, RawCategory } from '@/types/product'; 
+import { Category } from '@/types/product'; 
 
 interface Props {
   category: Category;

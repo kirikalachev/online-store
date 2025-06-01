@@ -21,7 +21,7 @@ const RegisterPage = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', {
+      await axios.post('http://localhost:3000/api/auth/register', {
         username,
         email,
         password,
@@ -31,6 +31,7 @@ const RegisterPage = () => {
 
       router.push('/auth/login');
     } catch (err) {
+      console.log("Error creating profile " + err);
       setError('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);

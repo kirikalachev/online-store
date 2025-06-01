@@ -18,16 +18,15 @@ const handleSubmit = async (e: React.FormEvent) => {
   setError('');
 
   try {
-    const response = await axios.post('http://localhost:3000/api/auth/login', {
+    await axios.post('http://localhost:3000/api/auth/login', {
       email,
       password,
     }); 
 
-    // Ако заявката е минала успешно (Axios автоматично хваща грешки), можем спокойно да продължим:
     router.push('/');
     console.log('Login successful');
-  } catch (err: any) {
-    console.error('Login error:', err.response?.data || err.message);
+  } catch (err) {
+    console.error('Login error: ', err);
     setError('Login failed. Please check your credentials.');
   } finally {
     setIsLoading(false);

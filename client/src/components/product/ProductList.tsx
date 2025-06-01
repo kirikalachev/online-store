@@ -3,8 +3,9 @@
 import axios from 'axios';
 import { useState } from 'react';
 import EditProduct from './EditProduct';
-import { Product, RawProduct, Category, RawCategory } from '@/types/product'; 
-import { toRawProduct } from '@/utils/transform';
+import { Product, Category } from '@/types/product'; 
+// import { toRawProduct } from '@/utils/transform';
+import Image from 'next/image';
 
 interface Props {
   products: Product[];
@@ -29,27 +30,6 @@ export default function ProductList({ products, setProducts, categories }: Props
     }
   };
 
-// const handleUpdate = async (updated: Product, formData: FormData) => {
-//   try {
-//     await axios.put(
-//       `http://localhost:3000/api/products/${updated.id}`,
-//       formData,
-//       {
-//         headers: {
-//           'Content-Type': 'multipart/form-data',
-//         },
-//       }
-//     );
-
-//     setProducts(prev =>
-//       prev.map(p => (p.id === updated.id ? updated : p))
-//     );
-//     setEditingProduct(null);
-//   } catch (error) {
-//     console.error('Грешка при обновяване:', error);
-//   }
-// };
-
 const handleUpdate = async (updated: Product, formData: FormData) => {
   try {
   const res = await axios.put(
@@ -67,9 +47,7 @@ const handleUpdate = async (updated: Product, formData: FormData) => {
     prev.map(p => (p.id === data.product.id ? data.product : p))
   );
   setEditingProduct(null);
-} catch (err: any) {
-  const errorMessage = err.response?.data?.message || 'Грешка при обновяване на продукта.';
-  alert(errorMessage);
+} catch (err) {
   console.error('Update failed:', err);
 }
 };
@@ -79,11 +57,16 @@ const handleUpdate = async (updated: Product, formData: FormData) => {
       {products.map(product => (
         <div key={product.id} className='bg-red-200 m-3 p-4 rounded w-60'>
           {product.mainImage ? (
-            <img
-              src={`http://localhost:3000${product.mainImage}`}
-              alt={product.name}
-              className='w-full h-40 object-cover mb-2 rounded'
-            />
+            <div className="relative w-full h-40 mb-2 rounded overflow-hidden">
+              <Image
+                src={`http://localhost:3000${product.mainImage}`}
+                alt={product.name}
+                fill
+                sizes="(max-width: 768px) 100vw, 300px"
+                priority
+                className="object-cover"
+              />
+            </div>
           ) : (
             <div className='w-full h-40 bg-gray-200 flex items-center justify-center mb-2 rounded'>
               <span className='text-gray-500'>Няма снимка</span>
