@@ -6,6 +6,7 @@ import EditProduct from './EditProduct';
 import { Product, Category } from '@/types/product'; 
 // import { toRawProduct } from '@/utils/transform';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Props {
   products: Product[];
@@ -90,6 +91,12 @@ const handleUpdate = async (updated: Product, formData: FormData) => {
           >
             Редактиране
           </button>
+          <Link
+            href={`http://localhost:3001/products/product/${product.id}`}
+            className='mt-2 bg-blue-500 text-white px-2 py-1 rounded ml-2'
+          >
+            Виж продукт
+          </Link>
         </div>
       ))}
 

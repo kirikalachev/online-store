@@ -1,3 +1,4 @@
+//EditProduct.tsx
 'use client';
 import { useState, ChangeEvent } from 'react';
 import { Product, Category } from '@/types/product';
