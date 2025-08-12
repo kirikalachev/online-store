@@ -1,4 +1,4 @@
-
+//admin/page.tsx
 "use client";
 import { useEffect, useState, useCallback } from "react";
 import ProductList from "@/components/admin/product/ProductList";

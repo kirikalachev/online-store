@@ -1,15 +1,19 @@
-import ProductList from "@/components/products/productsList";
-import type { Product, RawProduct, Category, RawCategory } from "@/types/product";
+// Page.tsx
+import { getProducts } from "@/lib/getProducts";
+import ProductCard from "@/components/products/ProductCard";
+import Link from "next/link";
+import UserProfileSection from "@/components/profile/UserProfileSection";
 
-
-export default function Home() {
+export default async function HomePage() {
+  const products = await getProducts();
 
   return (
-    <div>
-      hello
-    </div>
-  )
+    <main className="">
+      <UserProfileSection />
+      <Link href={'http://localhost:3001/admin'}>Продукти</Link>
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </main>
+  );
 }
-
-//knight.dark - 10.06
-//load products client logic to be done

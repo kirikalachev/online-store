@@ -92,7 +92,7 @@ const handleUpdate = async (updated: Product, formData: FormData) => {
             Редактиране
           </button>
           <Link
-            href={`http://localhost:3001/products/product/${product.id}`}
+            href={`http://localhost:3001/products/${product.id}`}
             className='mt-2 bg-blue-500 text-white px-2 py-1 rounded ml-2'
           >
             Виж продукт

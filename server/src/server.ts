@@ -1,16 +1,23 @@
-// src/server.ts
+// server.ts
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import app from './app';
 
 dotenv.config();
-connectDB();
 
-const port = process.env.PORT || 3000;
+// Стартирай връзка с БД
+(async () => {
+  try {
+    console.log('🔌 Connecting to DB...');
+    await connectDB();
+    console.log('✅ DB connected.');
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
-
-console.log('EMAIL_ADDRESS:', process.env.EMAIL_ADDRESS);
-console.log('EMAIL_APP_PASS:', process.env.EMAIL_APP_PASS);
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`🚀 Server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('❌ Failed to connect to DB:', error);
+    process.exit(1);
+  }
+})();
