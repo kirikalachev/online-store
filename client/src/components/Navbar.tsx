@@ -15,6 +15,12 @@ export default function Navbar() {
       <Link href="/admin" className="hover:underline">
         Админ
       </Link>
+        <Link href="/auth/login" className="hover:underline">
+        Логин
+      </Link>
+      <Link href="/auth/register" className="hover:underline">
+        Регистрация
+      </Link>
     </nav>
   )
 }

@@ -8,6 +8,7 @@ import productRoutes from './products/product.routes';
 import userRoutes from './users/user.routes';
 import authRoutes from './auth/auth.routes';
 import categoryRoutes from './categories/category.routes';
+import favoritesRoutes from './favorites/favorite.routes';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/favorites', favoritesRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello, this is the API root!');

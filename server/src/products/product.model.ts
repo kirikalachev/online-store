@@ -1,12 +1,12 @@
 //products/product.model.ts
-import mongoose, {Document, Schema} from 'mongoose';
+import mongoose, {Document, Schema, Types} from 'mongoose';
 
 interface IProduct extends Document {
    //  id: string;
     name: string;
     description: string;
     price: number;
-    category: mongoose.Types.ObjectId;
+    category: Types.ObjectId;
     mainImage: string;
     galleryImages: string[];
     createdAt: Date;

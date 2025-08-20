@@ -1,14 +1,13 @@
-import axios from "axios"
-import { RawProduct, Product } from "@/types/product"
-import { mapProducts } from "./mapProducts"
+// lib/getProducts.ts
 
-export async function getProducts(): Promise<Product[]> {
-  const response = await axios.get<RawProduct[]>("http://localhost:3000/api/products", {
-    // force-cache за Next.js 14 App Router
-    headers: {
-      "Cache-Control": "force-cache",
-    },
-  })
+import axios from "axios";
+import { RawProduct, Product } from "@/types/product";
+import { mapProducts } from "./mapProducts";
 
-  return mapProducts(response.data)
+export async function getProducts(userId?: string): Promise<Product[]> {
+  const url = `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api"}/products`;
+  const params = userId ? { userId } : {};
+
+  const response = await axios.get<RawProduct[]>(url, { params });
+  return mapProducts(response.data); // mapProducts вече работи с isFavorite
 }

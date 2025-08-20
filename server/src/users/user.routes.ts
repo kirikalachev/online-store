@@ -9,4 +9,5 @@ router.get('/me', authMiddleware, getCurrentUser);
 router.put('/:userId', authMiddleware, updateUser);
 router.delete('/:userId', authMiddleware, deleteUser);
 
+
 export default router;

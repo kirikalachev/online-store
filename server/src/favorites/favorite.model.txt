@@ -1,0 +1,6 @@
+// // src/favorites/favorites.model.ts
+// import { Types } from "mongoose";
+
+// export type FavoriteProductId = Types.ObjectId;
+
+// export const isValidObjectId = (id: string) => Types.ObjectId.isValid(id);

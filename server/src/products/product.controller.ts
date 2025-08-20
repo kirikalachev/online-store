@@ -5,6 +5,7 @@ import Product from './product.model';
 import Category from '../categories/category.model';
 import fs from 'fs';
 import path from 'path';
+import User from '../users/user.model';
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -52,6 +53,19 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
 
 
 // Извличане на всички продукти
+// export const getAllProducts = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<void> => {
+//   try {
+//     const products = await Product.find().populate('category');
+//     res.status(200).json(products);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error fetching products.' });
+//   }
+// };
+
 export const getAllProducts = async (
   req: Request,
   res: Response,
