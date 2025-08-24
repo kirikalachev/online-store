@@ -1,3 +1,4 @@
+//ProductCard.tsx
 import { Product } from "@/types/product"; // <-- импортираме Product
 import Link from "next/link";
 
@@ -7,6 +8,7 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product, onToggle }: ProductCardProps) {
+
   return (
     <div className="border rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200 p-4 bg-white relative">
       <Link href={`http://localhost:3001/products/${product.id}`} className="absolute inset-0 z-0">

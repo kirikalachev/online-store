@@ -1,0 +1,7 @@
+!!!
+оправен favorite button на единични продукти
+автоматично подновяване на activetoken
+middleware fixed
+
+2.
+cart система

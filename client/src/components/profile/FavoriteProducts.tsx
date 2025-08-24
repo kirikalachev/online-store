@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Product } from "@/types/product"; // <-- импортираме Product
 import { getProductsWithFavorites } from "@/lib/api/favorites";
