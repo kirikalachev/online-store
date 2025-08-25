@@ -10,11 +10,13 @@ type FavoriteButtonProps = {
 
 export default function FavoriteButton({ productId, initialIsFavorite, token }: FavoriteButtonProps) {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
-
+  // console.log(isFavorite);
   const handleClick = async () => {
     try {
       const data = await toggleFavorite(productId, token);
       setIsFavorite(data.isFavorite);
+        console.log(isFavorite);
+
     } catch (err) {
       console.error(err);
     }
