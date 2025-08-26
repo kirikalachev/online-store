@@ -1,4 +1,6 @@
 // favorites.ts
+
+import { apiFetch } from './apiClient';
 import { mapRawProduct } from "@/utils/transform";
 import type { Product, RawProduct } from "@/types/product";
 
@@ -6,11 +8,8 @@ type ProductsResponse = {
   items: Product[];
 };
 
-export async function getProductsWithFavorites(token?: string): Promise<ProductsResponse> {
-  const res = await fetch("http://localhost:3000/api/favorites/products", {
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
-    credentials: 'include',
-  });
+export async function getProductsWithFavorites(): Promise<ProductsResponse> {
+  const res = await apiFetch('/favorites/products');
 
   if (!res.ok) throw new Error("Failed to fetch products");
 
@@ -20,15 +19,11 @@ export async function getProductsWithFavorites(token?: string): Promise<Products
   return { items };
 }
 
-export async function toggleFavorite(productId: string, token?: string): Promise<{ isFavorite: boolean }> {
-  const res = await fetch(`http://localhost:3000/api/favorites/${productId}`, {
+export async function toggleFavorite(productId: string): Promise<{ isFavorite: boolean }> {
+  const res = await apiFetch(`/favorites/${productId}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({}),
-    credentials: 'include',
   });
 
   if (!res.ok) {

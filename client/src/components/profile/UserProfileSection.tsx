@@ -5,7 +5,7 @@ import { userApi } from '@/lib/api/users';
 import { authApi } from '@/lib/api/auth';
 import Link from 'next/link';
 
-type UserType = { id: string; username: string; email: string };
+type UserType = { id: string; username: string; email: string; role: string; };
 
 const UserProfileSection = () => {
   const [user, setUser] = useState<UserType | null>(null);
@@ -49,6 +49,7 @@ const UserProfileSection = () => {
         <div className="text-center">
           <p>Здравей, {user.username}!</p>
           <p>Имейл: {user.email}</p>
+          <p>Роля: {user.role}</p>
           <button
             onClick={handleLogout}
             className="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none"
