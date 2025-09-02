@@ -5,15 +5,14 @@ import { toggleFavorite } from "@/lib/api/favorites";
 type FavoriteButtonProps = {
   productId: string;
   initialIsFavorite: boolean;
-  token?: string;
 };
 
-export default function FavoriteButton({ productId, initialIsFavorite, token }: FavoriteButtonProps) {
+export default function FavoriteButton({ productId, initialIsFavorite }: FavoriteButtonProps) {
   const [isFavorite, setIsFavorite] = useState(initialIsFavorite);
   // console.log(isFavorite);
   const handleClick = async () => {
     try {
-      const data = await toggleFavorite(productId, token);
+      const data = await toggleFavorite(productId);
       setIsFavorite(data.isFavorite);
         console.log(isFavorite);
 

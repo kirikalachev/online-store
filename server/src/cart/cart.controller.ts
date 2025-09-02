@@ -1,71 +1,100 @@
-// import { Request, Response} from 'express';
-// import { Cart } from './cart.model';
-// import mongoose from 'mongoose';
+import { Request, Response } from "express";
+import { CartService } from "./cart.service";
+import mongoose from "mongoose";
+
+// локален тип за този контролер
+type ReqWithUser = Request & { user?: { id: string; role?: "user" | "admin" } };
+
+export const getCart = async (req: ReqWithUser, res: Response) => {
+  const userId = req.user?.id || null;
+  const cartId = req.cookies.cartId || null;
+
+  const cart = await CartService.getCart(userId, cartId);
+  res.json(cart || { items: [] });
+};
+
+export const addToCart = async (req: ReqWithUser, res: Response) => {
+  const userId = req.user?.id || null;
+  const cartId = req.cookies.cartId || null;
+  const { productId, quantity } = req.body;
+
+  const cart = await CartService.addToCart(userId, cartId, productId, quantity);
+
+  // cookie за гост
+  if (!userId && !cartId && cart?._id) {
+    res.cookie("cartId", (cart._id as mongoose.Types.ObjectId).toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 7
+    });
+  }
+
+  res.status(200).json(cart);
+};
+
+export const removeFromCart = async (req: ReqWithUser, res: Response) => {
+  const userId = req.user?.id || null;
+  const cartId = req.cookies.cartId || null;
+  const { productId } = req.body;
+
+  const cart = await CartService.removeFromCart(userId, cartId, productId);
+  res.status(200).json(cart);
+};
+
+export const clearCart = async (req: ReqWithUser, res: Response) => {
+  const userId = req.user?.id || null;
+  const cartId = req.cookies.cartId || null;
+
+  await CartService.clearCart(userId, cartId);
+  res.status(200).json({ message: "Cart cleared" });
+};
+
+// import { Request, Response } from "express";
+// import { CartService } from "./cart.service";
+// import mongoose from "mongoose";
 
 // export const getCart = async (req: Request, res: Response) => {
-//     try {
-//         const userId = req.user?._id;
-//         if (!userId) return res.status(401).json({ message: "Not authenticated" });
-//         let cart = await Cart.findOne({ user: userId }).populate("items.product");
+//   const userId = req.user?.id || null;
+//   const cartId = req.cookies.cartId || null;
 
-//         if (!cart) {
-//             cart = new Cart({ user: userId, items: [] });
-//             await cart.save();
-//         }
-//         res.json(cart);
-//     } catch (error) {
-//         res.status(500).json({ message: "Error loading cart", error })
-//     }
-// }
+//   const cart = await CartService.getCart(userId, cartId);
+//   res.json(cart || { items: [] });
+// };
 
-// export const addTocart = async (req: Request, res: Response) => {
-//     try {
-//         const userId = req.user?._id;
-//         const { productId, quantity } = req.body;
+// export const addToCart = async (req: Request, res: Response) => {
+//   const userId = req.user?.id || null;
+//   const cartId = req.cookies.cartId || null;
+//   const { productId, quantity } = req.body;
 
-//         if (!userId) return res.status(401).json({ message: "Not authenticated" });
-//         if(!mongoose.Types.ObjectId.isValid(productId)) {
-//             return res.status(400).json({ message: "Invalid product ID" });
-//         }
-//         const cart = await Cart.findOne({ user: userId }) || new Cart({ user: userId, items: [] });
+//   const cart = await CartService.addToCart(userId, cartId, productId, quantity);
 
-//         const existingItem = cart.items.find((item) => item.product.toString() === productId);
+//   // cookie за гост
+//   if (!userId && !cartId && cart?._id) {
+//     res.cookie("cartId", (cart._id as mongoose.Types.ObjectId).toString(), {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       sameSite: "strict",
+//       maxAge: 1000 * 60 * 60 * 24 * 7
+//     });
+//   }
 
-//         if (existingItem) {
-//             existingItem.quantity += quantity || 1;
-//         } else {
-//             cart.items.push({ product: productId, quantity: quantity || 1 });
-//         }
-//          await cart.save();
-//         res.status(200).json(cart);
-//     }
-//     catch (error) {
-//         res.status(500).json({ message: "Error loading cart", error })
-//     }
-// }
+//   res.status(200).json(cart);
+// };
 
-// export const addTocart = async (req: Request, res: Response) => {
-//     try {
-//         const userId = req.user?._id;
-//         const { productId, quantity } = req.body;
+// export const removeFromCart = async (req: Request, res: Response) => {
+//   const userId = req.user?.id || null;
+//   const cartId = req.cookies.cartId || null;
+//   const { productId } = req.body;
 
-//         if (!userId) return res.status(401).json({ message: "Not authenticated" });
-//         if(!mongoose.Types.ObjectId.isValid(productId)) {
-//             return res.status(400).json({ message: "Invalid product ID" });
-//         }
-//         const cart = await Cart.findOne({ user: userId }) || new Cart({ user: userId, items: [] });
+//   const cart = await CartService.removeFromCart(userId, cartId, productId);
+//   res.status(200).json(cart);
+// };
 
-//         const existingItem = cart.items.find((item) => item.product.toString() === productId);
+// export const clearCart = async (req: Request, res: Response) => {
+//   const userId = req.user?.id || null;
+//   const cartId = req.cookies.cartId || null;
 
-//         if (existingItem) {
-//             existingItem.quantity += quantity || 1;
-//         } else {
-//             cart.items.push({ product: productId, quantity: quantity || 1 });
-//         }
-//          await cart.save();
-//         res.status(200).json(cart);
-//     }
-//     catch (error) {
-//         res.status(500).json({ message: "Error loading cart", error })
-//     }
-// }
+//   await CartService.clearCart(userId, cartId);
+//   res.status(200).json({ message: "Cart cleared" });
+// };

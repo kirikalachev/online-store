@@ -21,6 +21,9 @@ export default function Navbar() {
       <Link href="/auth/register" className="hover:underline">
         Регистрация
       </Link>
+      <Link href="/cart" className="hover:underline">
+        Количка
+      </Link>
     </nav>
   )
 }

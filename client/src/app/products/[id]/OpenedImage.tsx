@@ -22,12 +22,12 @@ export default function OpenedImage({ images, initialIndex, onClose }: OpenedIma
   return (
     <div 
   className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
-  onClick={onClose} // клик върху фон
+  onClick={onClose} 
 >
   {/* Контейнер за изображението */}
   <div 
     className="relative w-[90%] max-w-3xl h-[80%] flex items-center justify-center"
-    onClick={(e) => e.stopPropagation()} // спираме клик събитията от децата
+    onClick={(e) => e.stopPropagation()} 
   >
     <button
       onClick={onClose}
