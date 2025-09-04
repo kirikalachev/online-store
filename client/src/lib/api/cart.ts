@@ -6,9 +6,6 @@ export type CartResponse = {
   items: CartItem[];
 };
 
-/**
- * Взимане на текущата cart (user или guest)
- */
 export async function getCart(): Promise<CartResponse> {
   const res = await apiFetch('/cart');
 
@@ -47,11 +44,11 @@ export async function addToCart(productId: string, quantity: number = 1): Promis
  * Премахване на продукт от cart
  * @param productId - ID на продукта
  */
-export async function removeFromCart(productId: string): Promise<CartResponse> {
+export async function removeFromCart(productId: string, priceAtTheTime: number): Promise<CartResponse> {
   const res = await apiFetch('/cart/remove', {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId }),
+    body: JSON.stringify({ productId, priceAtTheTime }), // подаваме и цената
   });
 
   if (!res.ok) {
@@ -64,6 +61,7 @@ export async function removeFromCart(productId: string): Promise<CartResponse> {
 
   return { items };
 }
+
 
 /**
  * Изчистване на cart (например при successful order)

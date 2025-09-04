@@ -6,6 +6,8 @@ import Category from '../categories/category.model';
 import fs from 'fs';
 import path from 'path';
 import User from '../users/user.model';
+import { getProductsByIds } from './product.service';
+
 
 export const createProduct = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -52,20 +54,6 @@ export const createProduct = async (req: Request, res: Response): Promise<void> 
 };
 
 
-// Извличане на всички продукти
-// export const getAllProducts = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ): Promise<void> => {
-//   try {
-//     const products = await Product.find().populate('category');
-//     res.status(200).json(products);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Error fetching products.' });
-//   }
-// };
-
 export const getAllProducts = async (
   req: Request,
   res: Response,
@@ -79,7 +67,48 @@ export const getAllProducts = async (
   }
 };
 
+// export async function batchGetProducts(req: Request, res: Response): Promise<void> {
+//   try {
+//     const idsQuery = req.query.ids as string;
+//     if (!idsQuery) {
+//       res.status(400).json({ message: 'No IDs provided' });
+//       return;
+//     }
+
+//     const ids = idsQuery.split(',');
+//     const products = await getProductsByIds(ids);
+
+//     res.json({ products }); // НЕ return res.json
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Failed to fetch products' });
+//   }
+// }
+
+
+
+
 // Извличане на продукт по ID
+
+// product.controller.ts
+export async function batchGetProducts(req: Request, res: Response): Promise<void> {
+  try {
+    const idsQuery = req.query.ids as string;
+    if (!idsQuery) {
+      res.status(400).json({ message: 'No IDs provided' });
+      return;
+    }
+
+    const ids = idsQuery.split(',');
+    const products = await getProductsByIds(ids); // service функцията
+
+    res.json({ products });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch products' });
+  }
+}
+
 export const getProductById = async (
   req: Request,
   res: Response,

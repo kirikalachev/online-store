@@ -24,6 +24,9 @@ export default function Navbar() {
       <Link href="/cart" className="hover:underline">
         Количка
       </Link>
+      <Link href="/checkout" className="hover:underline">
+        Чекаут
+      </Link>
     </nav>
   )
 }

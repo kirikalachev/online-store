@@ -19,6 +19,15 @@ export const getAllProductsService = async (userId?: string) => {
   }));
 };
 
+export async function getProductsByIds(ids: string[]) {
+  // Филтрираме само валидни ObjectId-та
+  const validIds = ids.filter(id => mongoose.Types.ObjectId.isValid(id));
+  const objectIds = validIds.map(id => new mongoose.Types.ObjectId(id));
+
+  const products = await Product.find({ _id: { $in: objectIds } });
+  return products;
+}
+
 export const getProductByIdService = async (id: string, userId?: string) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid product ID format");

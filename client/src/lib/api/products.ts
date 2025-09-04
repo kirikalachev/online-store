@@ -10,14 +10,16 @@ export async function getProductById(id: string): Promise<Product | null> {
   return mapRawProduct(raw);
 }
 
-// lib/api/products.ts
 export async function getProductsByIds(ids: string[]): Promise<Product[]> {
   if (ids.length === 0) return [];
-  const res = await fetch(`/api/products?ids=${ids.join(',')}`);
+
+  const res = await fetch(`http://localhost:3000/api/products/batch?ids=${ids.join(',')}`);
   if (!res.ok) throw new Error('Failed to fetch products');
+
   const data = await res.json();
-  return data.products; // масив от продукти
+  return data.products;
 }
+
 
 export async function getProducts(): Promise<Product[]> {
   const res = await apiFetch(`/products`);
