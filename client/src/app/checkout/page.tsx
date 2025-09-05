@@ -50,28 +50,19 @@ export default function CheckoutPage() {
   }, []);
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  
 
   const handleSubmit = async () => {
-    if (!firstName || !lastName || !phone || !street || !city || !postalCode) {
-      alert("Моля, попълнете всички задължителни полета.");
-      return;
-    }
-
     setSubmitting(true);
     try {
       const res = await apiFetch("/orders/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstName,
-          lastName,
-          phone,
-          street,
-          city,
-          postalCode,
-          note,
-          paymentMethod: "cod"
+          userId: null,   // backend ще го вземе от req.user ако има логнат потребител
+          cartId: null,   // backend ще го вземе от cookie-то
         }),
+        credentials: "include", // <--- важно за Http-Only cookie
       });
 
       if (!res.ok) {
@@ -81,10 +72,7 @@ export default function CheckoutPage() {
 
       const order = await res.json();
 
-      // Clear cart
       await clearCart();
-
-      // Redirect to order confirmation page
       router.push(`/orders/${order._id}`);
     } catch (err: any) {
       alert(err.message);
@@ -92,6 +80,7 @@ export default function CheckoutPage() {
       setSubmitting(false);
     }
   };
+
 
   if (loading) return <div className="p-6 text-center">Зареждане...</div>;
 

@@ -10,6 +10,7 @@ import authRoutes from './auth/auth.routes';
 import categoryRoutes from './categories/category.routes';
 import favoritesRoutes from './favorites/favorite.routes';
 import cartRoutes from './cart/cart.routes';
+import orderRoutes from './orders/order.routes';
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(
   cors({
     origin: 'http://localhost:3001',
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
@@ -35,6 +36,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/favorites', favoritesRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 app.get('/', (req, res) => {
